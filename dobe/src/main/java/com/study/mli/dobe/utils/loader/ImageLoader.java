@@ -58,22 +58,20 @@ public class ImageLoader{
     }
 
     private void loadImage(final String url,  final GifImageView imgv) {
-        //            if() {}
-//            future.cancel(true);
         final ILView ilView = new ILImageView(imgv);
 
         startLoadView(ilView);
         if(mLoadList.containsKey(url)) {
             WeakReference<Future> loader = mLoadList.get(url);
             Future future = loader.get();
-            if(future != null && !future.cancel(true)) {
-                loadImageByNet(url, imgv, ilView);
-            }else {
-                mLoadList.remove(url);
+            if(future != null) {
+                if(future.cancel(true)) {
+                    Log.i("testtesttest", "取消了一个线程");
+                }
             }
-        }else {
-            loadImageByNet(url, imgv, ilView);
         }
+        loadImageByNet(url, imgv, ilView);
+
     }
 
     private void loadImageByNet(final String url, final GifImageView imgv, final ILView ilView) {
@@ -93,7 +91,7 @@ public class ImageLoader{
                             }
 
                             SetImageUtils.getInstance().setImageView(url, imgv, bytes);
-                            Log.i("testtesttest", "" + mLoadList.size());
+                            Log.i("testtesttest", "" + times++);
                         }
                     });
                 }
