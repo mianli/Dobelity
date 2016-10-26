@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.study.mli.dobe.app.DBGlobal;
 import com.study.mli.dobe.customview.GifImageView;
+import com.study.mli.dobe.utils.cache.CacheHelper;
+import com.study.mli.dobe.utils.cache.DiskHelper;
 import com.study.mli.dobe.utils.ilview.ILImageView;
 import com.study.mli.dobe.utils.ilview.ILView;
 
@@ -54,13 +56,14 @@ public class ImageLoader{
                 v.clear();
             }
         }
-        mViews.put(view.hashCode()+"", view);
+        mViews.put(view.hashCode() + "", view);
     }
 
     private void loadImage(final String url,  final GifImageView imgv) {
         final ILView ilView = new ILImageView(imgv);
 
         startLoadView(ilView);
+
         if(mLoadList.containsKey(url)) {
             WeakReference<Future> loader = mLoadList.get(url);
             Future future = loader.get();
@@ -70,8 +73,16 @@ public class ImageLoader{
                 }
             }
         }
-        loadImageByNet(url, imgv, ilView);
 
+        byte[] data;
+        if((data = CacheHelper.getInstance().getData(url) ) != null) {
+            SetImageUtils.getInstance().setImageview(imgv, data);
+        }else if((data = DiskHelper.getInstance().readFromFile(url)) != null) {
+            SetImageUtils.getInstance().setImageview(imgv, data);
+            CacheHelper.getInstance().saveData(url, data);
+        }else {
+            loadImageByNet(url, imgv, ilView);
+        }
     }
 
     private void loadImageByNet(final String url, final GifImageView imgv, final ILView ilView) {
@@ -90,6 +101,8 @@ public class ImageLoader{
                                 return;
                             }
 
+                            CacheHelper.getInstance().saveData(url, bytes);
+                            DiskHelper.getInstance().save2File(url, bytes);
                             SetImageUtils.getInstance().setImageView(url, imgv, bytes);
                             Log.i("testtesttest", "" + times++);
                         }
