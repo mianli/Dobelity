@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.study.mli.dobe.app.DBGlobal;
 import com.study.mli.dobe.customview.GifImageView;
+import com.study.mli.dobe.tools.DBLog;
 import com.study.mli.dobe.utils.cache.CacheHelper;
 import com.study.mli.dobe.utils.cache.DiskHelper;
 import com.study.mli.dobe.utils.ilview.ILImageView;
@@ -75,11 +76,14 @@ public class ImageLoader{
         }
 
         byte[] data;
-        if((data = CacheHelper.getInstance().getData(url) ) != null) {
-            SetImageUtils.getInstance().setImageview(imgv, data);
-        }else if((data = DiskHelper.getInstance().readFromFile(url)) != null) {
+//        if((data = CacheHelper.getInstance().getData(url) ) != null) {
+//            SetImageUtils.getInstance().setImageview(imgv, data);
+//            DBLog.i("load form cache");
+//        }else
+        if((data = DiskHelper.getInstance().readFromFile(url)) != null) {
             SetImageUtils.getInstance().setImageview(imgv, data);
             CacheHelper.getInstance().saveData(url, data);
+            DBLog.i("load form sd card");
         }else {
             loadImageByNet(url, imgv, ilView);
         }
