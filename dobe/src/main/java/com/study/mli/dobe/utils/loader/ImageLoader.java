@@ -1,11 +1,8 @@
 package com.study.mli.dobe.utils.loader;
 
-import android.graphics.Movie;
 import android.os.Handler;
 import android.util.Log;
 
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.internal.DiskLruCache;
 import com.study.mli.dobe.cls.eImageType;
 import com.study.mli.dobe.customview.GifImageView;
 import com.study.mli.dobe.tools.DBLog;
@@ -37,7 +34,7 @@ public class ImageLoader{
 
     public ImageLoader() {
         mHandler = new Handler();
-        executorService = Executors.newCachedThreadPool();
+        executorService = Executors.newFixedThreadPool(20);
     }
 
     public static ImageLoader getInstance() {
@@ -63,11 +60,7 @@ public class ImageLoader{
         mViews.put(view.hashCode() + "", view);
     }
 
-    private void loadImage(final String url,  final GifImageView imgv) {
-        final ILView ilView = new ILImageView(imgv);
-
-        startLoadView(ilView);
-
+    private void filterTask(String url) {
         if(mLoadList.containsKey(url)) {
             WeakReference<Future> loader = mLoadList.get(url);
             Future future = loader.get();
@@ -77,26 +70,28 @@ public class ImageLoader{
                 }
             }
         }
+        mLoadList.remove(url);
+    }
 
+    private void loadImage(final String url,  final GifImageView imgv) {
+        final ILView ilView = new ILImageView(imgv);
+
+        startLoadView(ilView);
+
+        filterTask(url);
         byte[] data;
-        if((data = CacheHelper.getInstance().getData(url) ) != null) {
-            SetImageUtils.getInstance().setImageview(imgv, data);
-            DBLog.i("load form cache");
-        }else
-        if((data = DiskHelper.getInstance().readFromFile(url)) != null) {
-            DBLog.i("load form sd card");
-            SetImageUtils.getInstance().setImageView(url, imgv, data);
-            CacheHelper.getInstance().saveData(url, data);
-        }else {
-            loadImageByNet(url, imgv, ilView);
-        }
+//        if((data = CacheHelper.getInstance().getData(url) ) != null) {
+//            SetImageUtils.getInstance().setImageview(imgv, data);
+//            DBLog.i("load form cache");
+//        }else
+        loadDiskImage(url, imgv);
     }
 
     private void loadImageByNet(final String url, final GifImageView imgv, final ILView ilView) {
-        LoadImage li = creator(mHandler, url, imgv, new iLoadFinishListener() {
+        LoadImageHelper li = new LoadImageHelper(mHandler, url, imgv, new iLoadFinishListener() {
             @Override
             public void onFinish(boolean successful, final byte[] bytes) {
-                if(successful && bytes != null) {
+                if (successful && bytes != null) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -108,24 +103,44 @@ public class ImageLoader{
 //                                return;
 //                            }
 
+                            DBLog.i("load from net");
                             CacheHelper.getInstance().saveData(url, bytes);
-                            if(SetImageUtils.getInstance().setImageView(url, imgv, bytes)) {
-                                DiskHelper.getInstance().save2File(url, bytes, eImageType.eGif);
-                            }else {
-                                DiskHelper.getInstance().save2File(url, bytes, eImageType.eImage);
-                            }
-                            Log.i("testtesttest", "" + times++);
+
+                            executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
+                                @Override
+                                public void onFinish(boolean successful, byte[] bytes) {
+                                    //是否缓存成功
+                                    if(successful) {
+                                        DBLog.i("write to disk success");
+                                    }
+                                }
+                            }));
+
+                            SetImageUtils.getInstance().setImageView(url, imgv, bytes);
                         }
                     });
                 }
             }
         });
-        Future future = executorService.submit(li);//.execute(li);
-        mLoadList.put(url, new WeakReference<>(future));
+
+        Future future = executorService.submit(li);
     }
 
-    LoadImage creator(Handler handler, String url, GifImageView imgv, iLoadFinishListener listener) {
-        return new LoadImage(handler, url, imgv, listener);
+    private void loadDiskImage(final String url, final GifImageView gifImageView) {
+        DBLog.i("start loading from disk");
+        DiskHelper dh = new DiskHelper(url, mHandler, new iLoadFinishListener() {
+            @Override
+            public void onFinish(boolean successful, byte[] bytes) {
+                if(successful) {
+                    DBLog.i("load iamge from disk success");
+                    SetImageUtils.getInstance().setImageView(gifImageView, bytes);
+                    CacheHelper.getInstance().saveData(url, bytes);
+                }else {
+                    loadImageByNet(url, gifImageView, null);
+                }
+            }
+        });
+        Future future = executorService.submit(dh);
     }
 
 }

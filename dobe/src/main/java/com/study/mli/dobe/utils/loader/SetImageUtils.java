@@ -27,11 +27,10 @@ public class SetImageUtils {
 		return mInstance;
 	}
 
-	public boolean setImageView(String url, GifImageView gifview, byte[] bytes) {
+	public void setImageView(String url, GifImageView gifview, byte[] bytes) {
 		if(url != null && url.equals(gifview.getTag())) {
-			return gifview.setBytes(bytes);
+			gifview.setBytes(bytes);
 		}
-		return false;
 	}
 
 	public void setImageView(GifImageView gifview, byte[] bytes) {
@@ -49,6 +48,14 @@ public class SetImageUtils {
 			gifView.setImageResource(DEFAULT_IMAGE_RESOURCE);
 		}else {
 			gifView.setImageBitmap(bm);
+		}
+	}
+
+	public boolean isGifImage(byte[] bytes) {
+		if(getMovie(bytes) != null) {
+			return true;
+		}else {
+			return false;
 		}
 	}
 

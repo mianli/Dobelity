@@ -11,12 +11,15 @@ import java.io.InputStream;
  */
 public class DApplication extends Application {
 
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Handler handler = new Handler();
 		DBGlobal.init(handler);
 		initUrl();
+
+		DBGlobal.mInstance.ImageFile = this.getExternalFilesDir(DBGlobal.mInstance.imageFileName);
 	}
 
 	private void initUrl() {

@@ -3,9 +3,13 @@ package com.study.mli.dobe.utils.loader.cache;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.os.Handler;
 
+import com.study.mli.dobe.app.DBGlobal;
 import com.study.mli.dobe.cls.eImageType;
 import com.study.mli.dobe.tools.DBLog;
+import com.study.mli.dobe.utils.loader.SetImageUtils;
+import com.study.mli.dobe.utils.loader.iLoadFinishListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,37 +17,62 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by limian on 2016/10/25.
  */
 
-public class DiskHelper {
+public class DiskHelper implements Runnable{
 
-	private static DiskHelper mInstance;
-
-	public static DiskHelper getInstance() {
-		if(mInstance == null) {
-			mInstance = new DiskHelper();
-		}
-		return mInstance;
+	public enum eType {
+		eWrite,
+		eRead
 	}
+	private eType mType = eType.eRead;
+	private iLoadFinishListener mListener;
+	private Handler mHandler;
+	private String mUrl;
+	private byte[] mData;
+
 	private String mParentPath;
+
+	public DiskHelper(String url, Handler handler, iLoadFinishListener listener) {
+		this.mHandler = handler;
+		this.mUrl = url;
+		this.mListener = listener;
+		this.mType = eType.eRead;
+	}
+
+	public DiskHelper(String url, byte[] bytes, Handler handler, iLoadFinishListener listener) {
+		this.mHandler = handler;
+		this.mUrl = url;
+		this.mData = bytes;
+		this.mListener = listener;
+		this.mType = eType.eWrite;
+	}
+
+	@Override
+	public void run() {
+		if(mType == eType.eRead) {
+			final byte[] data = readFromFile(mUrl);
+			mHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					mListener.onFinish(data != null, data);
+				}
+			});
+		}else if(mType == mType.eWrite) {
+			save2File(mUrl, mData, SetImageUtils.mInstance.isGifImage(mData) ? eImageType.eGif : eImageType.eImage);
+		}
+	}
 
 	private String getFileName(String url, eImageType imageType) {
 		String path = mParentPath + MD5Encoder.encode(url);
-		if(imageType == eImageType.eImage) {
+		if(imageType == eImageType.eGif) {
 			return path + ".gif";
 		}else {
 			return path + ".jpg";
-		}
-	}
-
-	public void save(String url, Bitmap bitmap) {
-		createParentFileIfNeed();
-		File file = new File(getFileName(url, eImageType.eImage));
-		if(!file.exists()) {
-			createFile(file, bitmap);
 		}
 	}
 
@@ -71,10 +100,7 @@ public class DiskHelper {
 			try {
 				fis = new FileInputStream(file);
 				byte[] buffer = new byte[fis.available()];
-				int length;
-				while ((length = fis.read()) != -1) {
-					bout.write(buffer, 0, length);
-				}
+				fis.read(buffer);
 				return buffer;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -108,9 +134,10 @@ public class DiskHelper {
 
 	private void createParentFileIfNeed() {
 		if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			File sdcardDir = Environment.getExternalStorageDirectory();
-			mParentPath = sdcardDir.getPath() + "/Dobelity/";
-			File path = new File(mParentPath);
+//			File sdcardDir = Environment.getExternalStorageDirectory();
+//			mParentPath = DBGlobal.mInstance.ImageFile + "/Dobelity/";
+			File path = DBGlobal.mInstance.ImageFile;
+			mParentPath = path.getPath();
 			if(!path.exists()) {
 				boolean createResult = path.mkdirs();
 				DBLog.i("result :" + createResult);
@@ -130,16 +157,4 @@ public class DiskHelper {
 		}
 	}
 
-
-	private String getSDCardPath() {
-		File SDDir = null;
-		boolean exist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-		if(exist) {
-			SDDir = Environment.getExternalStorageDirectory();
-		}
-		if(SDDir != null) {
-			return SDDir.toString();
-		}
-		return null;
-	}
 }

@@ -99,7 +99,6 @@ public class GifImageView extends ImageView {
 		}
 	}
 
-
 	public boolean setBytes(byte[] bytes) {
 		this.bytes = bytes;
 		if(bytes != null) {
@@ -111,6 +110,14 @@ public class GifImageView extends ImageView {
 				setImageview(bytes);
 				return false;
 			}
+		}
+		return false;
+	}
+
+	//if showing gif or not when showing
+	public boolean showGif() {
+		if(movie != null) {
+			return true;
 		}
 		return false;
 	}

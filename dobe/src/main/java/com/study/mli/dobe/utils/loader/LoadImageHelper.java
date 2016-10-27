@@ -21,14 +21,14 @@ import java.net.URL;
 /**
  * Created by crown on 2016/9/19.
  */
-class LoadImage implements Runnable {
+class LoadImageHelper implements Runnable {
 
 	GifImageView mImgV;
 	String url;
 	Handler handler;
 	private iLoadFinishListener mFinishListener;
 
-	public LoadImage(Handler handler, String url, GifImageView imgv, iLoadFinishListener listener) {
+	public LoadImageHelper(Handler handler, String url, GifImageView imgv, iLoadFinishListener listener) {
 		this.handler = handler;
 		this.url = url;
 		this.mImgV = imgv;
@@ -87,6 +87,10 @@ class LoadImage implements Runnable {
 		return null;
 	}
 
+	//^
+	//|
+	//|
+	//Deprecated
 	private InputStream getInputstream() {
 		InputStream is = null;
 		try {

@@ -6,6 +6,8 @@ import android.os.Handler;
 import com.study.mli.dobe.utils.loader.ParserUtils;
 import com.study.mli.dobe.utils.loader.cache.ILBytesCache;
 
+import java.io.File;
+
 /**
  * Created by crown on 2016/9/8.
  */
@@ -14,6 +16,8 @@ public class DBGlobal {
 	public String URL = new String();
 	public Handler mHandler;
 	public ILBytesCache cache;
+	public File ImageFile;
+	public String imageFileName = "Dobe";
 
 	public DBGlobal(Handler handler) {
 		this.mHandler = handler;
