@@ -66,7 +66,7 @@ public class ImageLoader{
             Future future = loader.get();
             if(future != null) {
                 if(future.cancel(true)) {
-                    DBLog.i("cancel task");
+                    DBLog.i("-------------->cancel task");
                 }
             }
         }
@@ -77,13 +77,12 @@ public class ImageLoader{
         final ILView ilView = new ILImageView(imgv);
 
         startLoadView(ilView);
-
         filterTask(url);
         byte[] data;
-//        if((data = CacheHelper.getInstance().getData(url) ) != null) {
-//            SetImageUtils.getInstance().setImageview(imgv, data);
-//            DBLog.i("load form cache");
-//        }else
+        if((data = CacheHelper.getInstance().getData(url) ) != null) {
+            SetImageUtils.getInstance().setImageview(imgv, data);
+            DBLog.i("load form cache");
+        }else
         loadDiskImage(url, imgv);
     }
 
@@ -106,15 +105,15 @@ public class ImageLoader{
                             DBLog.i("load from net");
                             CacheHelper.getInstance().saveData(url, bytes);
 
-                            executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
-                                @Override
-                                public void onFinish(boolean successful, byte[] bytes) {
-                                    //是否缓存成功
-                                    if(successful) {
-                                        DBLog.i("write to disk success");
-                                    }
-                                }
-                            }));
+//                            executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
+//                                @Override
+//                                public void onFinish(boolean successful, byte[] bytes) {
+//                                    //是否缓存成功
+//                                    if (successful) {
+//                                        DBLog.i("write to disk success");
+//                                    }
+//                                }
+//                            }));
 
                             SetImageUtils.getInstance().setImageView(url, imgv, bytes);
                         }
@@ -124,6 +123,7 @@ public class ImageLoader{
         });
 
         Future future = executorService.submit(li);
+        mLoadList.put(url, new WeakReference<Future>(future));
     }
 
     private void loadDiskImage(final String url, final GifImageView gifImageView) {
@@ -141,6 +141,7 @@ public class ImageLoader{
             }
         });
         Future future = executorService.submit(dh);
+        mLoadList.put(url, new WeakReference<Future>(future));
     }
 
 }
