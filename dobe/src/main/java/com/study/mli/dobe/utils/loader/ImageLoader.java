@@ -1,13 +1,16 @@
 package com.study.mli.dobe.utils.loader;
 
+import android.graphics.Movie;
 import android.os.Handler;
 import android.util.Log;
 
-import com.study.mli.dobe.app.DBGlobal;
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.internal.DiskLruCache;
+import com.study.mli.dobe.cls.eImageType;
 import com.study.mli.dobe.customview.GifImageView;
 import com.study.mli.dobe.tools.DBLog;
-import com.study.mli.dobe.utils.cache.CacheHelper;
-import com.study.mli.dobe.utils.cache.DiskHelper;
+import com.study.mli.dobe.utils.loader.cache.CacheHelper;
+import com.study.mli.dobe.utils.loader.cache.DiskHelper;
 import com.study.mli.dobe.utils.ilview.ILImageView;
 import com.study.mli.dobe.utils.ilview.ILView;
 
@@ -76,10 +79,10 @@ public class ImageLoader{
         }
 
         byte[] data;
-//        if((data = CacheHelper.getInstance().getData(url) ) != null) {
-//            SetImageUtils.getInstance().setImageview(imgv, data);
-//            DBLog.i("load form cache");
-//        }else
+        if((data = CacheHelper.getInstance().getData(url) ) != null) {
+            SetImageUtils.getInstance().setImageview(imgv, data);
+            DBLog.i("load form cache");
+        }else
         if((data = DiskHelper.getInstance().readFromFile(url)) != null) {
             DBLog.i("load form sd card");
             SetImageUtils.getInstance().setImageView(url, imgv, data);
@@ -106,8 +109,11 @@ public class ImageLoader{
 //                            }
 
                             CacheHelper.getInstance().saveData(url, bytes);
-                            DiskHelper.getInstance().save2File(url, bytes);
-                            SetImageUtils.getInstance().setImageView(url, imgv, bytes);
+                            if(SetImageUtils.getInstance().setImageView(url, imgv, bytes)) {
+                                DiskHelper.getInstance().save2File(url, bytes, eImageType.eGif);
+                            }else {
+                                DiskHelper.getInstance().save2File(url, bytes, eImageType.eImage);
+                            }
                             Log.i("testtesttest", "" + times++);
                         }
                     });

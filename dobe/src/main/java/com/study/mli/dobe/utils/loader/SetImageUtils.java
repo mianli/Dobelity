@@ -27,10 +27,11 @@ public class SetImageUtils {
 		return mInstance;
 	}
 
-	public void setImageView(String url, GifImageView gifview, byte[] bytes) {
+	public boolean setImageView(String url, GifImageView gifview, byte[] bytes) {
 		if(url != null && url.equals(gifview.getTag())) {
-			gifview.setBytes(bytes);
+			return gifview.setBytes(bytes);
 		}
+		return false;
 	}
 
 	public void setImageView(GifImageView gifview, byte[] bytes) {

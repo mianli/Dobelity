@@ -100,16 +100,19 @@ public class GifImageView extends ImageView {
 	}
 
 
-	public void setBytes(byte[] bytes) {
+	public boolean setBytes(byte[] bytes) {
 		this.bytes = bytes;
 		if(bytes != null) {
 			Movie movie = getMovie(bytes);
 			if(movie != null) {
 				setMovie(movie);
+				return true;
 			}else {
 				setImageview(bytes);
+				return false;
 			}
 		}
+		return false;
 	}
 
 	public byte[] getBytes() {

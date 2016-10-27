@@ -1,21 +1,18 @@
-package com.study.mli.dobe.utils.cache;
+package com.study.mli.dobe.utils.loader.cache;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Movie;
 import android.os.Environment;
-import android.util.Log;
 
+import com.study.mli.dobe.cls.eImageType;
 import com.study.mli.dobe.tools.DBLog;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Created by limian on 2016/10/25.
@@ -33,21 +30,26 @@ public class DiskHelper {
 	}
 	private String mParentPath;
 
-	private String getFileName(String url) {
-		return mParentPath + MD5Encoder.encode(url) + ".jpg";
+	private String getFileName(String url, eImageType imageType) {
+		String path = mParentPath + MD5Encoder.encode(url);
+		if(imageType == eImageType.eImage) {
+			return path + ".gif";
+		}else {
+			return path + ".jpg";
+		}
 	}
 
 	public void save(String url, Bitmap bitmap) {
 		createParentFileIfNeed();
-		File file = new File(getFileName(url));
+		File file = new File(getFileName(url, eImageType.eImage));
 		if(!file.exists()) {
 			createFile(file, bitmap);
 		}
 	}
 
-	public void save2File(String url, byte[] bytes) {
+	public void save2File(String url, byte[] bytes, eImageType imageType) {
 		createParentFileIfNeed();
-		File file = new File(getFileName(url));
+		File file = new File(getFileName(url, imageType));
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
@@ -62,7 +64,7 @@ public class DiskHelper {
 
 	public byte[] readFromFile(String url) {
 		createParentFileIfNeed();
-		File file = new File(getFileName(url));
+		File file = new File(getFileName(url, eImageType.eImage));
 		FileInputStream fis = null;
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		if(file.exists()) {
@@ -95,9 +97,9 @@ public class DiskHelper {
 	public Bitmap get(String url) {
 		if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			createParentFileIfNeed();
-			File file = new File(getFileName(url));
+			File file = new File(getFileName(url, eImageType.eImage));
 			if(file.exists()){
-				Bitmap bitmap = BitmapFactory.decodeFile(getFileName(url));
+				Bitmap bitmap = BitmapFactory.decodeFile(getFileName(url, eImageType.eImage));
 				return bitmap;
 			}
 		}

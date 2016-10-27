@@ -1,4 +1,4 @@
-package com.study.mli.dobe.utils.cache;
+package com.study.mli.dobe.utils.loader.cache;
 
 import java.security.MessageDigest;
 

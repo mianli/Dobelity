@@ -4,7 +4,7 @@ package com.study.mli.dobe.app;
 import android.os.Handler;
 
 import com.study.mli.dobe.utils.loader.ParserUtils;
-import com.study.mli.dobe.utils.cache.ILBytesCache;
+import com.study.mli.dobe.utils.loader.cache.ILBytesCache;
 
 /**
  * Created by crown on 2016/9/8.
