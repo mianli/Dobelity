@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Movie;
 import android.os.Environment;
+import android.util.Log;
+
+import com.study.mli.dobe.tools.DBLog;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -107,7 +110,8 @@ public class DiskHelper {
 			mParentPath = sdcardDir.getPath() + "/Dobelity/";
 			File path = new File(mParentPath);
 			if(!path.exists()) {
-				path.mkdirs();
+				boolean createResult = path.mkdirs();
+				DBLog.i("result :" + createResult);
 			}
 		}
 	}

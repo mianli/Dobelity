@@ -70,7 +70,7 @@ public class ImageLoader{
             Future future = loader.get();
             if(future != null) {
                 if(future.cancel(true)) {
-                    Log.i("testtesttest", "取消了一个线程");
+                    DBLog.i("cancel task");
                 }
             }
         }
@@ -81,9 +81,9 @@ public class ImageLoader{
 //            DBLog.i("load form cache");
 //        }else
         if((data = DiskHelper.getInstance().readFromFile(url)) != null) {
-            SetImageUtils.getInstance().setImageview(imgv, data);
-            CacheHelper.getInstance().saveData(url, data);
             DBLog.i("load form sd card");
+            SetImageUtils.getInstance().setImageView(url, imgv, data);
+            CacheHelper.getInstance().saveData(url, data);
         }else {
             loadImageByNet(url, imgv, ilView);
         }
@@ -97,13 +97,13 @@ public class ImageLoader{
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if(DBGlobal.mInstance.cache.getCache(url) == null) {
-                                DBGlobal.mInstance.cache.saveInCache(url, bytes);
-                            }
-
-                            if (mViews.get(ilView.hashCode() + "") == null || mViews.get(ilView.hashCode() + "").invalidate()) {
-                                return;
-                            }
+//                            if(DBGlobal.mInstance.cache.getCache(url) == null) {
+//                                DBGlobal.mInstance.cache.saveInCache(url, bytes);
+//                            }
+//
+//                            if (mViews.get(ilView.hashCode() + "") == null || mViews.get(ilView.hashCode() + "").invalidate()) {
+//                                return;
+//                            }
 
                             CacheHelper.getInstance().saveData(url, bytes);
                             DiskHelper.getInstance().save2File(url, bytes);
