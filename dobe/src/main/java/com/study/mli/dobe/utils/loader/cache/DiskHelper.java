@@ -137,7 +137,7 @@ public class DiskHelper implements Runnable{
 //			File sdcardDir = Environment.getExternalStorageDirectory();
 //			mParentPath = DBGlobal.mInstance.ImageFile + "/Dobelity/";
 			File path = DBGlobal.mInstance.ImageFile;
-			mParentPath = path.getPath();
+			mParentPath = path.getPath() + "/";
 			if(!path.exists()) {
 				boolean createResult = path.mkdirs();
 				DBLog.i("result :" + createResult);

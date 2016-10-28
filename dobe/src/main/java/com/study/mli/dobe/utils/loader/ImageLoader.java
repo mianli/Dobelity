@@ -105,15 +105,15 @@ public class ImageLoader{
                             DBLog.i("load from net");
                             CacheHelper.getInstance().saveData(url, bytes);
 
-//                            executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
-//                                @Override
-//                                public void onFinish(boolean successful, byte[] bytes) {
-//                                    //是否缓存成功
-//                                    if (successful) {
-//                                        DBLog.i("write to disk success");
-//                                    }
-//                                }
-//                            }));
+                            executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
+                                @Override
+                                public void onFinish(boolean successful, byte[] bytes) {
+                                    //是否缓存成功
+                                    if (successful) {
+                                        DBLog.i("write to disk success");
+                                    }
+                                }
+                            }));
 
                             SetImageUtils.getInstance().setImageView(url, imgv, bytes);
                         }
