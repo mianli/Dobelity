@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -380,4 +381,9 @@ public class GifImageView extends ImageView {
 		return mUrl != null && mUrl.equals(getTag());
 	}
 
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+//		return super.dispatchTouchEvent(event);
+		return false;
+	}
 }

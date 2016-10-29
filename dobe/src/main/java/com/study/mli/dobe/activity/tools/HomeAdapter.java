@@ -60,28 +60,33 @@ public class HomeAdapter extends BaseAdapter {
 		}else {
 			holder = (MyViewHolder) convertView.getTag();
 		}
-		setOnItemTouchListener(position, holder, convertView);
+//		setOnItemTouchListener(position, holder, convertView);
 		ImageLoader.getInstance().display(list.get(position).thumbnail, holder.mImgv);
 		holder.mTv.setText(list.get(position).title);
 		return convertView;
 	}
 
-	private void setOnItemTouchListener(final int position, final MyViewHolder viewHolder, final View view) {
-		viewHolder.mImgv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				setListener(position, viewHolder, view);
-			}
-		});
-		viewHolder.mTv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				setListener(position, viewHolder, view);
-			}
-		});
+	public void setOnItemClickListener(View view, int position, long id) {
+		setListener(position, view);
 	}
 
-	private void setListener(int position, MyViewHolder viewHolder, View view) {
+	public void setOnItemTouchListener(final int position, final MyViewHolder viewHolder, final View view) {
+		setListener(position, view);
+//		viewHolder.mImgv.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				setListener(position, viewHolder, view);
+//			}
+//		});
+//		viewHolder.mTv.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				setListener(position, viewHolder, view);
+//			}
+//		});
+	}
+
+	private void setListener(int position, View view) {
 		float height = view.getHeight();
 		float width = view.getWidth();
 		int[] location = new int[2];

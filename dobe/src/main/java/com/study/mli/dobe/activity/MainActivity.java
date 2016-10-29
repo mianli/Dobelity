@@ -3,6 +3,8 @@ package com.study.mli.dobe.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.study.mli.dobe.R;
@@ -41,6 +43,29 @@ public class MainActivity extends Activity {
         mAdapter = new HomeAdapter(this, mList);
         mGridView.setAdapter(mAdapter);
         parser();
+    }
+
+    private void initView() {
+        mGridView = (PullableGridView) findViewById(R.id.gv);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mAdapter.setOnItemClickListener(view, position, id);
+            }
+        });
+        mMainView = (PullToRefreshLayout) findViewById(R.id.main_layout);
+        mMainView.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+                DBGlobal.parser.resetPage();
+                loadData();
+            }
+
+            @Override
+            public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+                loadData();
+            }
+        });
     }
 
     private void parser() {
@@ -92,23 +117,6 @@ public class MainActivity extends Activity {
 
     private Context getContext() {
         return MainActivity.this;
-    }
-
-    private void initView() {
-        mGridView = (PullableGridView) findViewById(R.id.gv);
-        mMainView = (PullToRefreshLayout) findViewById(R.id.main_layout);
-        mMainView.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-                DBGlobal.parser.resetPage();
-                loadData();
-            }
-
-            @Override
-            public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-                loadData();
-            }
-        });
     }
 
 
