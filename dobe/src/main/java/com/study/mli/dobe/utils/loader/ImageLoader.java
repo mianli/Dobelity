@@ -65,7 +65,7 @@ public class ImageLoader{
         filterTask(url);
         byte[] data;
         if((data = CacheHelper.getInstance().getData(url) ) != null) {
-            SetImageUtils.getInstance().setImageview(imgv, data);
+            SetImageUtils.getInstance().setImageView(url, imgv, data);
         }else
         loadDiskImage(url, imgv);
     }
@@ -106,7 +106,7 @@ public class ImageLoader{
             @Override
             public void onFinish(boolean successful, byte[] bytes) {
                 if(successful) {
-                    SetImageUtils.getInstance().setImageView(gifImageView, bytes);
+                    SetImageUtils.getInstance().setImageView(url, gifImageView, bytes);
                     CacheHelper.getInstance().saveData(url, bytes);
                 }else {
                     loadImageByNet(url, gifImageView, null);

@@ -33,23 +33,23 @@ public class SetImageUtils {
 		}
 	}
 
-	public void setImageView(GifImageView gifview, byte[] bytes) {
-		Movie movie = getMovie(bytes);
-		if(movie != null) {
-			gifview.setMovie(movie);
-		}else {
-			setImageview(gifview, bytes);
-		}
-	}
-
-	public void setImageview(GifImageView gifView, byte[] bytes) {
-		Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-		if(bm == null) {
-			gifView.setImageResource(DEFAULT_IMAGE_RESOURCE);
-		}else {
-			gifView.setImageBitmap(bm);
-		}
-	}
+//	public void setImageView(GifImageView gifview, byte[] bytes) {
+//		Movie movie = getMovie(bytes);
+//		if(movie != null) {
+//			gifview.setMovie(movie);
+//		}else {
+//			setImageview(gifview, bytes);
+//		}
+//	}
+//
+//	public void setImageview(GifImageView gifView, byte[] bytes) {
+//		Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//		if(bm == null) {
+//			gifView.setImageResource(DEFAULT_IMAGE_RESOURCE);
+//		}else {
+//			gifView.setImageBitmap(bm);
+//		}
+//	}
 
 	public boolean isGifImage(byte[] bytes) {
 		if(getMovie(bytes) != null) {

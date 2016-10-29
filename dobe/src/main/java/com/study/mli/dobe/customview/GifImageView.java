@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Movie;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -99,7 +101,21 @@ public class GifImageView extends ImageView {
 		}
 	}
 
+	public void release() {
+		Drawable drawable = getDrawable();
+		if(drawable instanceof BitmapDrawable) {
+			BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+			Bitmap bitmap = bitmapDrawable.getBitmap();
+			if(bitmap != null && !bitmap.isRecycled()) {
+				bitmap.recycle();
+			}
+		}
+	}
+
 	public boolean setBytes(byte[] bytes) {
+//		if(bytes != null) {
+//			bytes = null;
+//		}
 		this.bytes = bytes;
 		if(bytes != null) {
 			Movie movie = getMovie(bytes);
@@ -131,6 +147,7 @@ public class GifImageView extends ImageView {
 	}
 
 	public void setMovie(Movie movie) {
+		release();
 		if(movie == null || !movie.equals(this.movie)) {
 			this.movie= movie;
 			requestLayout();
@@ -138,6 +155,7 @@ public class GifImageView extends ImageView {
 	}
 
 	public void setImageview(byte[] bytes) {
+		release();
 		Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 		if(bm != null) {
 			setImageBitmap(bm);
