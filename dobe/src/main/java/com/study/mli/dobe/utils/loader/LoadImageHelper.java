@@ -9,6 +9,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.study.mli.dobe.app.DBGlobal;
 import com.study.mli.dobe.customview.GifImageView;
+import com.study.mli.dobe.utils.loader.cache.CacheHelper;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,8 +34,8 @@ class LoadImageHelper implements Runnable {
 		this.url = url;
 		this.mImgV = imgv;
 		this.mFinishListener = listener;
-		byte[] bytes = DBGlobal.mInstance.cache.getCache(url);
-		if(bytes != null) {
+		byte[] bytes;
+		if( (bytes = CacheHelper.getInstance().getData(url)) != null || (bytes = imgv.getBytes()) != null ) {
 			SetImageUtils.getInstance().setImageView(url, imgv, bytes);
 		}else {
 			this.mImgV.setImageResource(SetImageUtils.DEFAULT_IMAGE_RESOURCE);
@@ -43,12 +44,7 @@ class LoadImageHelper implements Runnable {
 
 	@Override
 	public void run() {
-		byte[] cache = DBGlobal.mInstance.cache.getCache(url);
-		if(cache != null) {
-			mFinishListener.onFinish(true, cache);
-		}else {
-			loadUrl();
-		}
+		loadUrl();
 	}
 
 	private void loadUrl() {

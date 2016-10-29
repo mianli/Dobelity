@@ -19,6 +19,8 @@ import com.study.mli.dobe.app.DBGlobal;
 import com.study.mli.dobe.customview.GifImageView;
 import com.study.mli.dobe.utils.DBDeviceUtils;
 import com.study.mli.dobe.utils.loader.ImageLoader;
+import com.study.mli.dobe.utils.loader.cache.CacheHelper;
+import com.study.mli.dobe.utils.loader.cache.DiskHelper;
 
 /**
  * Created by crown on 2016/9/30.
@@ -58,8 +60,9 @@ public class ShowImageActivity extends Activity {
 		mContainer = (LinearLayout) findViewById(R.id.si_imgv_container);
 		mImgv = (GifImageView) findViewById(R.id.si_imgv);
 
-		if(mInfo.mThumbnail != null && DBGlobal.mInstance.cache.getCache(mInfo.mThumbnail) != null) {
-			mImgv.setBytes(DBGlobal.mInstance.cache.getCache(mInfo.mThumbnail));
+		byte[] data;
+		if((data = CacheHelper.getInstance().getData(mInfo.mThumbnail)) != null) {
+			mImgv.setBytes(data);
 		}
 	}
 

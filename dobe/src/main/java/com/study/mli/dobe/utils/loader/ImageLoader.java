@@ -28,10 +28,6 @@ public class ImageLoader{
     private Handler mHandler;
     public static ImageLoader mInstance;
 
-    private int times = 0;
-
-    private Map<String, ILView> mViews = new HashMap<>();
-
     public ImageLoader() {
         mHandler = new Handler();
         executorService = Executors.newFixedThreadPool(20);
@@ -51,15 +47,6 @@ public class ImageLoader{
         loadImage(url, imgv);
     }
 
-    private void startLoadView(ILView view) {
-        for (ILView v : mViews.values()) {
-            if(view.get().equals(v.get())) {
-                v.clear();
-            }
-        }
-        mViews.put(view.hashCode() + "", view);
-    }
-
     private void filterTask(String url) {
         if(mLoadList.containsKey(url)) {
             WeakReference<Future> loader = mLoadList.get(url);
@@ -74,14 +61,11 @@ public class ImageLoader{
     }
 
     private void loadImage(final String url,  final GifImageView imgv) {
-        final ILView ilView = new ILImageView(imgv);
 
-        startLoadView(ilView);
         filterTask(url);
         byte[] data;
         if((data = CacheHelper.getInstance().getData(url) ) != null) {
             SetImageUtils.getInstance().setImageview(imgv, data);
-            DBLog.i("load form cache");
         }else
         loadDiskImage(url, imgv);
     }
@@ -94,23 +78,14 @@ public class ImageLoader{
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-//                            if(DBGlobal.mInstance.cache.getCache(url) == null) {
-//                                DBGlobal.mInstance.cache.saveInCache(url, bytes);
-//                            }
-//
-//                            if (mViews.get(ilView.hashCode() + "") == null || mViews.get(ilView.hashCode() + "").invalidate()) {
-//                                return;
-//                            }
-
-                            DBLog.i("load from net");
                             CacheHelper.getInstance().saveData(url, bytes);
 
                             executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
                                 @Override
                                 public void onFinish(boolean successful, byte[] bytes) {
                                     //是否缓存成功
-                                    if (successful) {
-                                        DBLog.i("write to disk success");
+                                    if (!successful) {
+                                        DBLog.i("write to disk failed");
                                     }
                                 }
                             }));
@@ -123,16 +98,14 @@ public class ImageLoader{
         });
 
         Future future = executorService.submit(li);
-        mLoadList.put(url, new WeakReference<Future>(future));
+        mLoadList.put(url, new WeakReference<>(future));
     }
 
     private void loadDiskImage(final String url, final GifImageView gifImageView) {
-        DBLog.i("start loading from disk");
         DiskHelper dh = new DiskHelper(url, mHandler, new iLoadFinishListener() {
             @Override
             public void onFinish(boolean successful, byte[] bytes) {
                 if(successful) {
-                    DBLog.i("load iamge from disk success");
                     SetImageUtils.getInstance().setImageView(gifImageView, bytes);
                     CacheHelper.getInstance().saveData(url, bytes);
                 }else {
@@ -141,7 +114,7 @@ public class ImageLoader{
             }
         });
         Future future = executorService.submit(dh);
-        mLoadList.put(url, new WeakReference<Future>(future));
+        mLoadList.put(url, new WeakReference<>(future));
     }
 
 }

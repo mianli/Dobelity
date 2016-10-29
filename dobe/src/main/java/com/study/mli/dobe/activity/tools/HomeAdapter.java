@@ -16,6 +16,7 @@ import com.study.mli.dobe.cls.Picture;
 import com.study.mli.dobe.customview.GifImageView;
 import com.study.mli.dobe.tools.DBLog;
 import com.study.mli.dobe.utils.loader.ImageLoader;
+import com.study.mli.dobe.utils.loader.cache.CacheHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,10 +84,14 @@ public class HomeAdapter extends BaseAdapter {
 	private void setListener(int position, MyViewHolder viewHolder, View view) {
 		float height = view.getHeight();
 		float width = view.getWidth();
-		float x = view.getX();
-		float y = view.getY();
+		int[] location = new int[2];
+		view.getLocationOnScreen(location);
+		float x = location[0];//view.getX();
+		float y = location[1];//view.getY();
 
-		ImageViewInfo info = new ImageViewInfo(x, y, width, height, list.get(position).thumbnail, list.get(position).imgUrl);
+		ImageViewInfo info = new ImageViewInfo(x, y, width, height,
+					list.get(position).thumbnail, list.get(position).imgUrl,
+					CacheHelper.getInstance().getData(list.get(position).thumbnail));
 		Intent intent = new Intent(mActivity, ShowImageActivity.class);
 		Bundle data = new Bundle();
 		data.putSerializable(ShowImageActivity.IMAGEVIEW_INFO, info);

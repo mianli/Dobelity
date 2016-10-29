@@ -4,7 +4,6 @@ package com.study.mli.dobe.app;
 import android.os.Handler;
 
 import com.study.mli.dobe.utils.loader.ParserUtils;
-import com.study.mli.dobe.utils.loader.cache.ILBytesCache;
 
 import java.io.File;
 
@@ -15,13 +14,11 @@ public class DBGlobal {
 
 	public String URL = new String();
 	public Handler mHandler;
-	public ILBytesCache cache;
 	public File ImageFile;
 	public String imageFileName = "Dobe";
 
 	public DBGlobal(Handler handler) {
 		this.mHandler = handler;
-		this.cache = new ILBytesCache();
 
 	}
 
