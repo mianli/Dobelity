@@ -116,6 +116,7 @@ public class GifImageView extends ImageView {
 //		if(bytes != null) {
 //			bytes = null;
 //		}
+		this.movie = null;
 		this.bytes = bytes;
 		if(bytes != null) {
 			Movie movie = getMovie(bytes);

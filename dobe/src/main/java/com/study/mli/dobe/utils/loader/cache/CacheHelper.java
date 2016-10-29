@@ -2,6 +2,10 @@ package com.study.mli.dobe.utils.loader.cache;
 
 import android.util.LruCache;
 
+import com.study.mli.dobe.tools.DBLog;
+
+import java.lang.ref.WeakReference;
+
 /**
  * Created by limian on 2016/10/25.
  */
@@ -29,8 +33,12 @@ public class CacheHelper {
 		};
 	}
 
-	public void saveData(String url, final byte[] bytes) {
-		mLruCache.put(url, bytes);
+	public void saveData(String url, WeakReference<byte[]> bytes) {
+		if(url != null && bytes != null && bytes.get() != null) {
+			mLruCache.put(url, bytes.get());
+		}else {
+			DBLog.i("something null");
+		}
 	}
 
 	public byte[] getData(String url) {

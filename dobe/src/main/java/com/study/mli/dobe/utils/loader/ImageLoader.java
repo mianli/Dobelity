@@ -73,7 +73,7 @@ public class ImageLoader{
     private void loadImageByNet(final String url, final GifImageView imgv, final ILView ilView) {
         LoadImageHelper li = new LoadImageHelper(mHandler, url, imgv, new iLoadFinishListener() {
             @Override
-            public void onFinish(boolean successful, final byte[] bytes) {
+            public void onFinish(boolean successful, final WeakReference<byte[]> bytes) {
                 if (successful && bytes != null) {
                     mHandler.post(new Runnable() {
                         @Override
@@ -81,8 +81,9 @@ public class ImageLoader{
                             CacheHelper.getInstance().saveData(url, bytes);
 
                             executorService.submit(new DiskHelper(url, bytes, mHandler, new iLoadFinishListener() {
+
                                 @Override
-                                public void onFinish(boolean successful, byte[] bytes) {
+                                public void onFinish(boolean successful, WeakReference<byte[]> bytes) {
                                     //是否缓存成功
                                     if (!successful) {
                                         DBLog.i("write to disk failed");
@@ -90,7 +91,9 @@ public class ImageLoader{
                                 }
                             }));
 
-                            SetImageUtils.getInstance().setImageView(url, imgv, bytes);
+                            if(bytes != null) {
+                                SetImageUtils.getInstance().setImageView(url, imgv, bytes.get());
+                            }
                         }
                     });
                 }
@@ -104,9 +107,9 @@ public class ImageLoader{
     private void loadDiskImage(final String url, final GifImageView gifImageView) {
         DiskHelper dh = new DiskHelper(url, mHandler, new iLoadFinishListener() {
             @Override
-            public void onFinish(boolean successful, byte[] bytes) {
+            public void onFinish(boolean successful, WeakReference<byte[]> bytes) {
                 if(successful) {
-                    SetImageUtils.getInstance().setImageView(url, gifImageView, bytes);
+                    SetImageUtils.getInstance().setImageView(url, gifImageView, bytes.get());
                     CacheHelper.getInstance().saveData(url, bytes);
                 }else {
                     loadImageByNet(url, gifImageView, null);

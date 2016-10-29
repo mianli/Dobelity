@@ -15,6 +15,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,7 +62,7 @@ class LoadImageHelper implements Runnable {
 			public void onResponse(Response response) throws IOException {
 				final InputStream is = response.body().byteStream();
 				final byte[] bytes = InputStreamToByte(is);
-				mFinishListener.onFinish(true, bytes);
+				mFinishListener.onFinish(true, new WeakReference<>(bytes));
 			}
 		});
 

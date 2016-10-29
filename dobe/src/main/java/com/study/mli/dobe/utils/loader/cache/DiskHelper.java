@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -44,10 +45,10 @@ public class DiskHelper implements Runnable{
 		this.mType = eType.eRead;
 	}
 
-	public DiskHelper(String url, byte[] bytes, Handler handler, iLoadFinishListener listener) {
+	public DiskHelper(String url, WeakReference<byte[]> bytes, Handler handler, iLoadFinishListener listener) {
 		this.mHandler = handler;
 		this.mUrl = url;
-		this.mData = bytes;
+		this.mData = bytes.get();
 		this.mListener = listener;
 		this.mType = eType.eWrite;
 	}
@@ -59,7 +60,7 @@ public class DiskHelper implements Runnable{
 			mHandler.post(new Runnable() {
 				@Override
 				public void run() {
-					mListener.onFinish(data != null, data);
+					mListener.onFinish(data != null, new WeakReference<byte[]>(data));
 				}
 			});
 		}else if(mType == mType.eWrite) {
