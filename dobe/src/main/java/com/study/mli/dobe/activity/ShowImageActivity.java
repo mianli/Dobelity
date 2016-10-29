@@ -28,7 +28,7 @@ import com.study.mli.dobe.utils.loader.cache.DiskHelper;
 public class ShowImageActivity extends Activity {
 
 	public static final String IMAGEVIEW_INFO = "imageViewInfo";
-	private static final int ANIMATION_DURATION = 1000;
+	private static final int ANIMATION_DURATION = 500;
 
 	private ImageViewInfo mInfo;
 	private GifImageView mImgv;
@@ -81,6 +81,11 @@ public class ShowImageActivity extends Activity {
 
 		Rect oldRect = new Rect(left, top, right, bottom);
 		Rect newRect = new Rect(0, 0, mCover.getWidth(), mCover.getHeight());
+
+		float offsetX = Math.abs(oldRect.left - newRect.left);
+		float offsetY = Math.abs(oldRect.top - newRect.top);
+		double offsetPosition = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+		long time = (long) (offsetPosition / 100);
 
 		ValueAnimator containerAnimator = ValueAnimator.ofObject(new FrameEvaluator(), oldRect, newRect);
 

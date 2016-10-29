@@ -21,7 +21,7 @@
         </activity>
 
         <activity android:name=".activity.ShowImageActivity"
-                  android:theme="@style/Transparent"></activity>
+                  ></activity>
     </application>
 
 </manifest>

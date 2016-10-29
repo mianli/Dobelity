@@ -381,6 +381,7 @@ public class GifImageView extends ImageView {
 		return mUrl != null && mUrl.equals(getTag());
 	}
 
+	//取消了所有可点击事件，使其不能获取焦点
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
 //		return super.dispatchTouchEvent(event);

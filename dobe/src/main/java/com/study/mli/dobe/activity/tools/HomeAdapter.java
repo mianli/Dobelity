@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +72,6 @@ public class HomeAdapter extends BaseAdapter {
 	}
 
 	public void setOnItemTouchListener(final int position, final MyViewHolder viewHolder, final View view) {
-		setListener(position, view);
 //		viewHolder.mImgv.setOnClickListener(new View.OnClickListener() {
 //			@Override
 //			public void onClick(View v) {
@@ -90,7 +90,12 @@ public class HomeAdapter extends BaseAdapter {
 		float height = view.getHeight();
 		float width = view.getWidth();
 		int[] location = new int[2];
-		view.getLocationOnScreen(location);
+		MyViewHolder holder = (MyViewHolder) view.getTag();
+		if(holder == null) {
+			return;
+		}
+		ImageView imageView = holder.mImgv;
+		imageView.getLocationOnScreen(location);
 		float x = location[0];//view.getX();
 		float y = location[1];//view.getY();
 
