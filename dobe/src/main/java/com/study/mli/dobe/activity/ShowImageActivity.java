@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.study.mli.dobe.R;
 import com.study.mli.dobe.activity.tools.ImageViewInfo;
 import com.study.mli.dobe.app.DBGlobal;
 import com.study.mli.dobe.customview.GifImageView;
+import com.study.mli.dobe.tools.DBLog;
 import com.study.mli.dobe.utils.DBDeviceUtils;
 import com.study.mli.dobe.utils.loader.ImageLoader;
 import com.study.mli.dobe.utils.loader.cache.CacheHelper;
@@ -51,6 +53,7 @@ public class ShowImageActivity extends Activity {
 					startAnimation();
 				}
 			});
+
 		}
 
 	}

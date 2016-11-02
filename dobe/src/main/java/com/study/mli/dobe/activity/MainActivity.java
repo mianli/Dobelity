@@ -14,6 +14,7 @@ import com.study.mli.dobe.cls.Picture;
 import com.study.mli.dobe.customview.dialog.DBLoadingDialog;
 import com.study.mli.dobe.customview.loader.PullToRefreshLayout;
 import com.study.mli.dobe.customview.loader.PullableGridView;
+import com.study.mli.dobe.tools.DBLog;
 import com.study.mli.dobe.utils.loader.iGetDataListener;
 
 import org.jsoup.Jsoup;
@@ -53,6 +54,7 @@ public class MainActivity extends Activity {
                 mAdapter.setOnItemClickListener(view, position, id);
             }
         });
+        DBLog.i("GridView x:" + mGridView.getX() + " Y:" + mGridView.getY());
         mMainView = (PullToRefreshLayout) findViewById(R.id.main_layout);
         mMainView.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override

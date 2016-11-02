@@ -2,32 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:gravity="center"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:gravity="center"
-        android:background="@drawable/bg_item">
-        <com.study.mli.dobe.customview.GifImageView
-            android:id="@+id/gifview"
-            android:layout_width="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:focusable="false"
-            android:scaleType="fitCenter"
-            android:longClickable="true"/>
+            android:gravity="center"
+            android:background="@drawable/bg_item">
+            <com.study.mli.dobe.customview.GifImageView
+                android:id="@+id/gifview"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:focusable="false"
+                android:scaleType="fitCenter"
+                android:longClickable="true"/>
+        </LinearLayout>
+        <com.study.mli.dobe.customview.AutofitTextView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/tv"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:lines="2"
+            android:ellipsize="end"
+            app:maxTextSize="20sp"
+            app:minTextSize="8sp"
+            android:gravity="center"
+            android:text="description"
+            android:background="@drawable/bg_item"/>
     </LinearLayout>
-    <com.study.mli.dobe.customview.AutofitTextView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/tv"
-        android:layout_marginTop="10dp"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:lines="2"
-        android:ellipsize="end"
-        app:maxTextSize="20sp"
-        app:minTextSize="8sp"
-        android:gravity="center"
-        android:background="@drawable/bg_item"/>
+
 </LinearLayout>

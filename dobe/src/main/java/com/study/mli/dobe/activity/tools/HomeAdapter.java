@@ -61,7 +61,6 @@ public class HomeAdapter extends BaseAdapter {
 		}else {
 			holder = (MyViewHolder) convertView.getTag();
 		}
-//		setOnItemTouchListener(position, holder, convertView);
 		ImageLoader.getInstance().display(list.get(position).thumbnail, holder.mImgv);
 		holder.mTv.setText(list.get(position).title);
 		return convertView;
@@ -69,21 +68,6 @@ public class HomeAdapter extends BaseAdapter {
 
 	public void setOnItemClickListener(View view, int position, long id) {
 		setListener(position, view);
-	}
-
-	public void setOnItemTouchListener(final int position, final MyViewHolder viewHolder, final View view) {
-//		viewHolder.mImgv.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				setListener(position, viewHolder, view);
-//			}
-//		});
-//		viewHolder.mTv.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				setListener(position, viewHolder, view);
-//			}
-//		});
 	}
 
 	private void setListener(int position, View view) {
@@ -96,8 +80,8 @@ public class HomeAdapter extends BaseAdapter {
 		}
 		ImageView imageView = holder.mImgv;
 		imageView.getLocationOnScreen(location);
-		float x = location[0];//view.getX();
-		float y = location[1];//view.getY();
+		float x = view.getX();
+		float y = view.getY();
 
 		ImageViewInfo info = new ImageViewInfo(x, y, width, height,
 					list.get(position).thumbnail, list.get(position).imgUrl,
