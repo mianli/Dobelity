@@ -16,14 +16,13 @@ public class ImageViewInfo implements Serializable {
 	public String mUrl;
 	public byte[] mImageData;
 
-	public ImageViewInfo(float x, float y, float width , float height, String thumbnail, String url, byte[] imageData) {
+	public ImageViewInfo(float x, float y, float width , float height, String thumbnail, String url) {
 		this.mOriginX = x;
 		this.mOriginY = y;
 		this.mOriginWidth = width;
 		this.mOriginHeight = height;
 		this.mThumbnail = thumbnail;
 		this.mUrl = url;
-		this.mImageData = imageData;
 	}
 
 }

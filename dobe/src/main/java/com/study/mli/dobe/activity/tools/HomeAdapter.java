@@ -84,8 +84,7 @@ public class HomeAdapter extends BaseAdapter {
 		float y = view.getY();
 
 		ImageViewInfo info = new ImageViewInfo(x, y, width, height,
-					list.get(position).thumbnail, list.get(position).imgUrl,
-					CacheHelper.getInstance().getData(list.get(position).thumbnail));
+					list.get(position).thumbnail, list.get(position).imgUrl);
 		Intent intent = new Intent(mActivity, ShowImageActivity.class);
 		Bundle data = new Bundle();
 		data.putSerializable(ShowImageActivity.IMAGEVIEW_INFO, info);
