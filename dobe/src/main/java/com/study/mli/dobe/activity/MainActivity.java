@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.study.mli.dobe.R;
 import com.study.mli.dobe.activity.tools.HomeAdapter;
 import com.study.mli.dobe.app.DBGlobal;
-import com.study.mli.dobe.cls.Picture;
+import com.study.mli.dobe.cls.DBPicture;
 import com.study.mli.dobe.customview.dialog.DBLoadingDialog;
 import com.study.mli.dobe.customview.loader.PullToRefreshLayout;
 import com.study.mli.dobe.customview.loader.PullableGridView;
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
     private PullableGridView mGridView;
     private PullToRefreshLayout mMainView;
     private HomeAdapter mAdapter;
-    private List<Picture> mList = new ArrayList<>();
+    private List<DBPicture> mList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
         dialog.show();
         DBGlobal.parser.reset(this, new iGetDataListener() {
             @Override
-            public void onFinish(int page, List<Picture> pictures, boolean success) {
+            public void onFinish(int page, List<DBPicture> pictures, boolean success) {
                 if (success) {
                     mList.addAll(pictures);
                     mAdapter.notifyDataSetChanged();
@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
     private void loadData() {
         DBGlobal.parser.loadData(this, new iGetDataListener() {
             @Override
-            public void onFinish(int page, List<Picture> pictures, boolean success) {
+            public void onFinish(int page, List<DBPicture> pictures, boolean success) {
                 if (success) {
                     if (isRefresh(page)) {
                         mList.clear();

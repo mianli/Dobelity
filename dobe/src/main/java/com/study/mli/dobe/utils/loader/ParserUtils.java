@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.study.mli.dobe.app.DBGlobal;
-import com.study.mli.dobe.cls.Picture;
+import com.study.mli.dobe.cls.DBPicture;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -57,7 +57,7 @@ public class ParserUtils implements Runnable {
 		if(time == 0) {
 			return;
 		}
-		final List<Picture> list = new ArrayList<>();
+		final List<DBPicture> list = new ArrayList<>();
 		if(TextUtils.isEmpty(DBGlobal.mInstance.URL)) {
 			return;
 		}
@@ -75,7 +75,7 @@ public class ParserUtils implements Runnable {
 				String hotLevel = e.attr("title");
 				String imgUrl = e.select("a").attr("href").trim();
 				String thumbnail = e.select("img").attr("src").trim();
-				list.add(new Picture(id, title, imgUrl, thumbnail, hotLevel));
+				list.add(new DBPicture(id, title, imgUrl, thumbnail, hotLevel));
 			}
 			handler.post(new Runnable() {
 				@Override

@@ -6,9 +6,14 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -45,6 +50,7 @@ public class ShowImageActivity extends Activity {
 
 		mInfo = (ImageViewInfo) getIntent().getSerializableExtra(IMAGEVIEW_INFO);
 		if(mInfo != null) {
+			initActionBar();
 			getCenter();
 			initView();
 			mImgv.post(new Runnable() {
@@ -53,9 +59,20 @@ public class ShowImageActivity extends Activity {
 					startAnimation();
 				}
 			});
-
 		}
+	}
 
+	private void initActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setTitle(mInfo.mTitle);
+//		byte[] bytes = CacheHelper.getInstance().getData(mInfo.mUrl);
+//		if( bytes != null) {
+//			Bitmap bitmap= BitmapFactory.decodeByteArray(bytes, 0, bytes.length - 1);
+//			Drawable icon = new BitmapDrawable(bitmap);
+//			if(icon != null) {
+//				actionBar.setIcon(icon);
+//			}
+//		}
 	}
 
 	private void initView() {

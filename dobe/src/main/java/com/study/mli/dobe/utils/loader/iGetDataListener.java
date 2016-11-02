@@ -1,6 +1,6 @@
 package com.study.mli.dobe.utils.loader;
 
-import com.study.mli.dobe.cls.Picture;
+import com.study.mli.dobe.cls.DBPicture;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface iGetDataListener {
 
-	void onFinish(int page, List<Picture> pictures, boolean success);
+	void onFinish(int page, List<DBPicture> pictures, boolean success);
 }

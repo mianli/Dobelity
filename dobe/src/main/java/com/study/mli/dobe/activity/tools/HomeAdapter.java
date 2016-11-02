@@ -9,15 +9,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.study.mli.dobe.R;
 import com.study.mli.dobe.activity.ShowImageActivity;
-import com.study.mli.dobe.cls.Picture;
+import com.study.mli.dobe.cls.DBPicture;
 import com.study.mli.dobe.customview.GifImageView;
-import com.study.mli.dobe.tools.DBLog;
 import com.study.mli.dobe.utils.loader.ImageLoader;
-import com.study.mli.dobe.utils.loader.cache.CacheHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +24,9 @@ import java.util.List;
  */
 public class HomeAdapter extends BaseAdapter {
 
-	private List<Picture> list = new ArrayList<>();
+	private List<DBPicture> list = new ArrayList<>();
 	private Activity mActivity;
-	public HomeAdapter(Activity activity, List<Picture> list) {
+	public HomeAdapter(Activity activity, List<DBPicture> list) {
 		this.mActivity = activity;
 		this.list = list;
 	}
@@ -83,8 +80,9 @@ public class HomeAdapter extends BaseAdapter {
 		float x = view.getX();
 		float y = view.getY();
 
+		DBPicture pic = list.get(position);
 		ImageViewInfo info = new ImageViewInfo(x, y, width, height,
-					list.get(position).thumbnail, list.get(position).imgUrl);
+			pic.thumbnail, pic.imgUrl, pic.title);
 		Intent intent = new Intent(mActivity, ShowImageActivity.class);
 		Bundle data = new Bundle();
 		data.putSerializable(ShowImageActivity.IMAGEVIEW_INFO, info);

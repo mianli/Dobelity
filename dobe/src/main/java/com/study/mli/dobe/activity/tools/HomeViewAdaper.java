@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.study.mli.dobe.R;
-import com.study.mli.dobe.cls.Picture;
+import com.study.mli.dobe.cls.DBPicture;
 import com.study.mli.dobe.customview.GifImageView;
 import com.study.mli.dobe.utils.loader.ImageLoader;
 
@@ -21,10 +21,10 @@ import java.util.List;
 @Deprecated
 public class HomeViewAdaper extends RecyclerView.Adapter<HomeViewAdaper.HomeViewHolder> {
 
-	private List<Picture> list = new ArrayList<>();
+	private List<DBPicture> list = new ArrayList<>();
 	private Activity mActivity;
 
-	public HomeViewAdaper(Activity activity, List<Picture> list) {
+	public HomeViewAdaper(Activity activity, List<DBPicture> list) {
 		this.mActivity = activity;
 		this.list = list;
 	}
